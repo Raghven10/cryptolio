@@ -24,7 +24,7 @@ urlpatterns = [
     path('', views.index, name='index'),
     path('portfolio/', include('portfolio.urls')),
     path('admin/', admin.site.urls),
-]+ static(django.conf.settings.STATIC_URL, document_root=django.conf.settings.STATIC_ROOT)
+]
 
 
 admin.site.site_header  =  "Cryptolio Administration"
