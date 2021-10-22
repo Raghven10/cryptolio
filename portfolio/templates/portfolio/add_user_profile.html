@@ -1,0 +1,28 @@
+{% extends "base_template.html" %}
+{% block page_content %}
+<section class="text-gray-600 body-font">
+    <div class="container px-15 py-20 mx-auto">
+        <h1 class="display-4"> Update your profile</h1>
+          <p class="lead">Update your profile.</p>
+          <hr class="my-4">
+            {% load crispy_forms_tags %}
+            <form method="post" class="form-class" action="">
+                {% csrf_token %}
+                <div class="row">
+                    <div class="col-md-6">
+                        {{ form.fName|as_crispy_field}}
+                        {{ form.lName|as_crispy_field}}
+                        {{ form.email|as_crispy_field}}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <button type="submit" class="save btn btn-block btn-lg btn-success">Update</button>
+                    </div>
+                </div>
+            </form>
+
+  </div>
+</section>
+
+{% endblock %}

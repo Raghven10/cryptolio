@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Cryptolio</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.2/css/jquery.dataTables.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="{% static '/bootstrap/css/style.css' %}">
+    <link rel="stylesheet" href="{% static '/fa/css/all.css' %}">
+    <!-- tailwind css cdn link-->
+    <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body>
+
+<div class="tradingview-widget-container">
+  <div class="tradingview-widget-container__widget"></div>
+  <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-ticker-tape.js" async>
+  {
+  "symbols": [
+    {
+      "description": "BTC/USDT",
+      "proName": "BINANCE:BTCUSDT"
+    },
+    {
+      "description": "DOGE/USDT",
+      "proName": "BINANCE:DOGEUSDT"
+    },
+    {
+      "description": "ADA/USDT",
+      "proName": "BINANCE:ADAUSDT"
+    },
+    {
+      "description": "DOT/USDT",
+      "proName": "BINANCE:DOTUSDT"
+    },
+    {
+      "description": "BNB/USDT",
+      "proName": "BINANCE:BNBUSDT"
+    }
+  ],
+  "showSymbolLogo": true,
+  "colorTheme": "light",
+  "isTransparent": false,
+  "displayMode": "adaptive",
+  "locale": "en"
+}
+  </script>
+</div>
+
+<!-- TradingView Widget END -->
+
+
+<!--        <div class="header_img"> <img src="https://i.imgur.com/hczKIze.jpg" alt=""> </div>-->
+
+    <div class="l-navbar" id="nav-bar">
+        <nav class="nav">
+            <div> <a href="#" class="nav_logo"> <i class='bx bx-coin nav_logo-icon'></i> <span class="nav_logo-name">CRYPTOLIO</span> </a>
+                <div class="nav_list">
+                    <a href="{% url 'dashboard' %}" class="nav_link active"> <i class='bx bx-grid-alt nav_icon'></i> <span class="nav_name">Dashboard</span> </a>
+                    <a href="{% url 'user_profile' 0 %}" class="nav_link"> <i class='bx bx-user nav_icon'></i> <span class="nav_name">User Profile</span> </a>
+                    <a href="{% url 'portfolio' %}" class="nav_link"> <i class='bx bx-message-square-detail nav_icon'></i> <span class="nav_name">My Portfolio</span> </a>
+                    <a href="{% url 'exchanges' %}" class="nav_link"> <i class='bx bx-bar-chart-alt-2 nav_icon'></i> <span class="nav_name">Exchanges</span> </a>
+                    <a href="{% url 'market_news' %}" class="nav_link"> <i class='bx bx-news nav_icon'></i> <span class="nav_name">Market News</span> </a>
+                    <a href="{% url 'about' %}" class="nav_link"> <i class='bx bx-info-circle nav_icon'></i> <span class="nav_name">About</span> </a>
+                    <a href="{% url 'login' %}" class="nav_link"> <i class='bx bx-user nav_icon'></i> <span class="nav_name">Login</span> </a>
+                </div>
+            </div>
+        </nav>
+    </div>
+
+    <div class="height-100 bg-light">
+<!--        <h4>Main Components</h4>-->
+         {% block page_content %}{% endblock %}
+    </div>
+
+
+    <!--Container Main end-->
+ <!-- Bootstrap core JavaScript -->
+  <script src="{% static '/jquery/jquery.slim.min.js' %}"></script>
+
+  <script src="{% static '/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+    <script src="{% static '/fa/js/all.js' %}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.2/js/jquery.dataTables.min.js"></script>
+    <script src="{% static '/bootstrap/js/style.js' %}"></script>
+    <script src="{% static '/bootstrap/js/select2.js' %}"></script>
+    <script src="{% static '/bootstrap/js/datatable.js' %}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+</body>
+</html>

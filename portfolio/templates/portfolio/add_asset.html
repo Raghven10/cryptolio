@@ -1,0 +1,35 @@
+{% extends "base_template.html" %}
+{% block page_content %}
+<section class="text-gray-600 body-font">
+  <div class="container px-15 py-32 mx-auto">
+
+  <h1 class="display-4"> Add New Asset Detail</h1>
+  <p class="lead">Add your recent buy/sale order detail.
+    In oder to update existing order detail, go back and edit the existing order.</p>
+  <hr class="my-4">
+    {% load crispy_forms_tags %}
+    <form method="post" class="form-class" action="">
+        {% csrf_token %}
+        <div class="row">
+            <div class="col-md-6">
+                {{ form.date_of_purchase|as_crispy_field}}
+                {{ form.exchange_name|as_crispy_field}}
+                {{ form.token_name|as_crispy_field}}
+                {{ form.buy_rate|as_crispy_field}}
+                {{ form.quantity|as_crispy_field}}
+                {{ form.sale_rate|as_crispy_field}}
+                {{ form.date_of_sale|as_crispy_field}}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <button type="submit" class="save btn btn-block btn-lg btn-success">Save</button>
+            </div>
+        </div>
+    </form>
+
+
+  </div>
+</section>
+
+{% endblock %}
