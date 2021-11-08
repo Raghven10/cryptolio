@@ -1,0 +1,127 @@
+{% extends 'layouts/base.html' %}
+
+{% block title %} Market {% endblock title %}
+
+<!-- Specific CSS goes HERE -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+{% load humanize %}
+     <!-- Header -->
+    <div class="header bg-primary pb-6">
+      <div class="container-fluid">
+        <div class="header-body">
+          <div class="row align-items-center py-4">
+            <div class="col-lg-6 col-7">
+              <h6 class="h2 text-white d-inline-block mb-0">Top News</h6>
+              <nav aria-label="breadcrumb" class="d-none d-md-inline-block ml-md-4">
+                <ol class="breadcrumb breadcrumb-links breadcrumb-dark">
+                  <li class="breadcrumb-item"><a href="{% url 'home' %}"><i class="fas fa-home"></i></a></li>
+                  <li class="breadcrumb-item"><a href="{% url 'news' %}">News</a></li>
+                  <li class="breadcrumb-item active" aria-current="page">Top News</li>
+                </ol>
+              </nav>
+            </div>
+            <div class="col-lg-6 col-5 text-right">
+              <a href="#" class="btn btn-sm btn-neutral">All News</a>
+              <a href="{% url 'market' %}" class="btn btn-sm btn-neutral">Market</a>
+            </div>
+          </div>
+          <!-- Card stats -->
+          <div class="row">            
+           
+
+              {% comment %} <div class="p-3 md:w-1/3 sm:mb-0 mb-6">
+                <div class="rounded-lg h-64 overflow-hidden">
+                  <img alt="content" class="object-cover object-center h-full w-full" width="60" height="60" src="{{news.related_image_big}}">
+                </div>
+                <h2 class="text-xl font-medium title-font text-gray-900 mt-5">{{news.HEADLINE}}</h2>
+                 <p class="text-base leading-relaxed mt-2">{{ news.BODY | safe }}</p>
+
+                <a class="text-red-500 inline-flex items-center mt-3" href="{{news.news_link}}">Learn More
+                  <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-4 h-4 ml-2" viewBox="0 0 24 24">
+                    <path d="M5 12h14M12 5l7 7-7 7"></path>
+                  </svg>
+                </a>
+              </div> {% endcomment %}
+ {% for news in data %}
+    <div class="col-xl-4 order-xl-2">
+      <div class="card card-profile">
+        <img src="{{news.related_image_big}}" alt="Image placeholder" class="card-img-top">     
+       
+        <div class="card-body pt-0">
+          <div class="row">
+            <div class="h2 font-weight-bold card-title text-uppercase mb-0 text-justify">         
+            {{news.HEADLINE}}         
+            </div>
+             <span class="h6 mb-0 text-justify">            
+                Source: {{ news.news_provider_name}} 
+             </span> &nbsp; &nbsp;&nbsp;&nbsp;
+              <span class="h6 mb-0 text-justify float-right">            
+                Updated at: {{ news.last_updated}} 
+             </span>
+
+              <div class="text-justify">
+               {{news.BODY | safe}}
+              
+            </div>
+          </div>
+          <div class="text-justify">
+           <h5 class="h5">
+           Read <a href="{{ news.third_party_url}}"> here </a>
+            </h5>
+          
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+
+
+
+            {% endfor %}
+
+
+            {% comment %} <div class="col-xl-3 col-md-6">
+              <div class="card card-stats">
+                <!-- Card body -->                
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col">
+                      <h5 class="card-title text-uppercase text-muted mb-0">{{news.HEADLINE}}</h5>
+                      <span class="h2 font-weight-bold mb-0">{{news.symbol}} - {{coin.rank | ordinal}}</span><br>
+                    
+                    </div>
+                    <div class="col-auto">
+                      <div class="icon icon-shape bg-gradient-white text-white rounded-circle shadow">
+                        <img src = "{{coin.iconUrl}}" width="30" height="30">
+                      </div>
+                    </div>
+                  </div>
+                    <span class="mr-2 mb-0" > Price: {{coin.price | floatformat:"4"  }}$</span><br>
+                    <span class="mr-2" style="color:'{{coin.change}}>0'? green:red "> Change: {{coin.change}} % </span><br>                
+                </div>
+                
+              </div>
+            </div> {% endcomment %}
+
+            
+
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+<!-- Page content -->
+<div class="container-fluid mt--16 pb-6">
+    {% comment %} <h1>Market View by Coinranking </h1> {% endcomment %}
+    
+
+
+
+</div>
+
+{% endblock content %}

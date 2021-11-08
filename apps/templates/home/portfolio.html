@@ -1,0 +1,313 @@
+{% extends 'layouts/base.html' %}
+
+{% block title %} Tables {% endblock title %}
+
+{% block content %}
+{% load mathfilters %}
+  <div class="header bg-primary pb-6">
+    <div class="container-fluid">
+      <div class="header-body">
+        <div class="row align-items-center py-4">
+          <div class="col-lg-6 col-7">
+            <h6 class="h2 text-white d-inline-block mb-0">My Portfolio</h6>
+            <nav aria-label="breadcrumb" class="d-none d-md-inline-block ml-md-4">
+              <ol class="breadcrumb breadcrumb-links breadcrumb-dark">
+                <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+                <li class="breadcrumb-item"><a href="#">Portfolio</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Assets</li>
+              </ol>
+            </nav>
+          </div>
+          
+         
+        
+          <div class="col-lg-6 col-5 text-right">
+
+          {% if msg %}
+           <div class="alert alert-warning alert-dismissible fade show" role="alert">
+              {{msg}}
+              <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+           </div>
+          {% endif %}
+
+            <a class="btn btn-sm btn-neutral" href="#" role="button" data-toggle="dropdown" aria-haspopup="false" aria-expanded="false">
+                New
+            </a>     
+            
+              
+              <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right assetForm" id ="assetForm">
+                <div class="row shortcuts px-4">
+                <!--Form Object here -->
+
+                  <form action="#" method="POST">
+                   {% csrf_token %}
+                  <h6 class="heading-small text-muted mb-4">Order details</h6>
+                  <div class="pl-lg-4">
+                    <div class="row">
+                      <div class="col-lg-6">
+                        <div class="form-group">
+                          <label class="form-control-label" for="exchange">Select Exchange</label>
+                          <select type="text" id="exchange" onchange="loadCoins()" name="exchange" class="form-control select2" required placeholder="">
+                          <option value="" > Select Exchange</option>
+                          {% for e in exchanges %}              
+                          <option value="{{e}}"> {{e|upper}}</option> 
+                          {% endfor %}                       
+                          </select>                        
+                        </div>
+                      </div>
+                      <div class="col-lg-6">
+                        <div class="form-group">
+                          <label class="form-control-label" for="token">Select Token</label>
+                          <select type="text" id="token" name="token" class="form-control select2" placeholder="Select Token" required disabled>
+                          <option value=""> Select token</option>
+                          <option value=""> token</option>                        
+                          </select>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-lg-6">
+                        <div class="form-group">
+                          <label class="form-control-label" for="tradeType">Trade Type</label>
+                          <select type="text" id="tradeType" name="tradeType" onchange="setLeverage()" class="form-control" required placeholder="Select Trade Type">
+                          <option value="" > Select Trade Type</option> 
+                          <option value="SPOT"> SPOT</option> 
+                          <option value="OPTION"> OPTION</option> 
+                          <option value="FUTURE"> FUTURE</option>                            
+                          
+                          </select>                        
+                        </div>
+                      </div>
+                      <div class="col-lg-6">
+                        <div class="form-group">
+                          <label class="form-control-label" for="leverage">Leverage</label>
+                          <input type="number" id="leverage" name="leverage" class="form-control" required placeholder="leverage" min="1">
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-lg-6">
+                        <div class="form-group">
+                          <label class="form-control-label" for="input-first-name">Qty</label>
+                          <input type="number" id="totalQuantity" name="totalQuantity" class="form-control" required placeholder="Qty" min="0">
+                        </div>
+                      </div>
+                      <div class="col-lg-6">
+                        <div class="form-group">
+                          <label class="form-control-label" for="entryPrice">Entry Price</label>
+                          <input type="text" id="entryPrice" name="entryPrice"class="form-control" required placeholder="Entry Price" min="0">
+                        </div>
+                      </div>                      
+                    </div>                   
+                    <div class="row">
+                       <div class="col-lg-6">
+                        <div class="form-group">
+                         <label class="form-control-label" for="orderDate">Order Date</label>
+                         <input type="date" id="orderDate" name="orderDate"class="form-control" required placeholder="Order Date">
+                        </div>
+                      </div>
+                      <div class="col-lg-6">
+                        <div class="form-group">
+                         <label class="form-control-label" for="orderDate">Last Updated on</label>
+                         <input type="date" id="lastUpdatedOn" name="lastUpdatedOn"class="form-control" required placeholder="Last Updated On">
+                        </div>
+                      </div>
+                    </div>
+                     <div class="row">
+                     <div class="col-lg-6">
+                        <div class="form-group">
+                          <label class="form-control-label" for="exitPrice">Exit Price</label>
+                          <input type="text" id="exitPrice" name="exitPrice"class="form-control" placeholder="Exit Price" min="0">
+                        </div>
+                      </div>
+                      <div class="col-lg-6">
+                        <div class="form-group">
+                          <label class="form-control-label" for="lastUpdatedBy">Updated By</label>
+                          <input type="text" id="lastUpdatedBy" name="lastUpdatedBy" class="form-control" required value="{{ request.user.username }}" placeholder="lastUpdatedBy" readonly min="0">
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                       <div class="col-lg-8">
+                        <div class="form-group">
+                         <button class="btn btn-success btn-block" type="submit" value="submit">Submit</button>
+                        </div>
+                      </div>
+                      <div class="col-lg-4">
+                        <div class="form-group">
+                         <button class="btn btn-danger btn-block" type="cancel" value="reset">Cancel</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>               
+                  </form>
+
+
+
+                <!--Form Object ends -->
+                </div>
+              </div>
+
+              <a href="#" class="btn btn-sm btn-neutral">Filters</a>          
+           
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Page content -->
+  <div class="container-fluid mt--6">
+    <!-- Dark table -->
+    <div class="row">
+      <div class="col">
+        <div class="card bg-default shadow">
+          <div class="card-header bg-transparent border-0">
+            <h3 class="text-white mb-0">Order history</h3>
+          </div>
+          <div class="table-responsive">
+            <table class="table align-items-center table-dark table-flush">
+              <thead class="thead-dark text-white">
+                <tr>
+                  <th scope="col" class="sort" data-sort="name">Token</th>
+                  <th scope="col" class="sort" data-sort="budget">Qty</th>
+                  <th scope="col" class="sort" data-sort="budget">Amount</th>
+                  <th scope="col" class="sort" data-sort="budget">Entry Price</th>
+                  <th scope="col" class="sort" data-sort="budget">Exit Price</th>
+                  <th scope="col" class="sort" data-sort="budget">Current Price</th>
+                  <th scope="col" class="sort" data-sort="status">Profit/Loss</th>                  
+                  <th scope="col" class="sort" data-sort="completion">Status</th>
+                  <th scope="col"></th>
+                </tr>
+              </thead>
+              <tbody class="list">
+
+              {% for order in orders%}
+                <tr>
+                  <th scope="row">
+                    <div class="media align-items-center text-green">
+                      {% comment %} <a href="#" class="avatar rounded-circle mr-3">
+                        <img alt="Image placeholder" src="/static/assets/img/theme/bootstrap.jpg">
+                      </a> {% endcomment %}
+                      <div class="media-body">
+                        <span class="name mb-0 text-green text-sm">{{order.token}} |</span>
+                        <span class="name mb-0 text-yellow text-sm">{{order.tradeType}}</span>
+                        {% if 'order.leverage>=1' %}
+                          <span class="name mb-0 text-danger text-sm">{{order.leverage}}X</span>
+                        {% endif %}
+                      </div>
+                    </div>
+                  </th>
+                  <td class="budget">
+                    {{order.totalQuantity}}
+                  </td>
+                  <td>                    
+                      <span class="status">{{order.totalQuantity|mul:order.entryPrice | floatformat:"2"}} $</span>
+                   
+                  </td>
+                  <td>
+                   
+                      <span class="status">{{order.entryPrice}} $</span>                   
+                  </td>
+                  <td>
+                     
+                    {% if order.exitPrice %}
+                      <span class="status"> {{order.exitPrice}}  $</span>
+
+                    {% else %}
+                      <span class="badge badge-dot mr-4">
+                        <i class="bg-warning"></i> Order open
+                      </span>
+                    {% endif %}
+
+                  </td>
+                   <td>
+                     <i class="bg-warning"></i>
+                      <span class="status">    $</span>
+                    </span>
+                  </td>
+                   <td>
+                     <i class="bg-warning"></i>
+                      <span class="status text-yellow"><b>{{order.exitPrice|sub:order.entryPrice|mul:order.totalQuantity |floatformat:"2"}} $ </b></span>
+                    </span>
+                  </td>
+                  <td class="text-right">
+                    <div class="dropdown">
+                      <a class="btn btn-sm btn-icon-only text-light" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fas fa-ellipsis-v"></i>
+                      </a>
+                      <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
+                        <a class="dropdown-item" href="#">Details</a>   
+                        <a class="dropdown-item" href="#">Update</a>                       
+                        <a class="dropdown-item" href="#">Delete</a>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+
+               {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    {% include "includes/footer.html" %}
+
+  </div>
+
+{% endblock content %}
+
+<!-- Specific JS goes HERE --> 
+{% block javascripts %}
+  <script>   
+   
+    function loadCoins(){
+      console.log($("#exchange").val());
+      
+      var exchange = $("#exchange").val();
+      $.ajax({
+        url: `get_coins/${exchange}`,       
+        dataType: 'json',
+        success: function (data) {          
+          $("#token").prop('disabled', false); 
+          let html_data = '<option value="">---------</option>';
+          
+          console.log(data);
+          if(typeof(data) === "string"){data = JSON.parse(data)}
+          data.forEach(function (data) {
+              html_data += `<option value="${data}">${data}</option>`
+          });
+          $("#token").html(html_data); 
+          
+        }
+      });      
+    };
+
+    function setLeverage(){
+      var tradeType = $("#tradeType").val();
+      if (tradeType == 'SPOT') {
+        $("#leverage").val(1);
+        $("#leverage").prop('readonly', true); 
+      }
+      else {
+         
+        $("#leverage").prop('readonly', false); 
+      }
+    };
+
+
+
+    $(document).on('click', '.assetForm', function (e) {
+      e.stopPropagation();
+    });
+
+    $('.alert').alert()
+   
+  </script>
+
+
+{% endblock javascripts %}
