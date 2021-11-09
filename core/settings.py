@@ -18,7 +18,7 @@ SECRET_KEY = config('SECRET_KEY', default='S#perS3crEt_1122')
 DEBUG = config('DEBUG', default=True, cast=bool)
 
 # load production server from .env
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', config('SERVER', default='127.0.0.1')]
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', config('SERVER', default='127.0.0.1'), 'cryptolio-app.herokuapp.com']
 
 # Application definition
 
@@ -78,6 +78,11 @@ DATABASES = {
     }
 }
 
+# ie if Heroku server
+if 'DATABASE_URL' in os.environ:
+    import dj_database_url
+    DATABASES = {'default': dj_database_url.config()}
+
 # Password validation
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
 
@@ -109,6 +114,9 @@ USE_L10N = True
 
 USE_TZ = True
 
+
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
 #############################################################
 # SRC: https://devcenter.heroku.com/articles/django-assets
 
@@ -125,3 +133,5 @@ STATICFILES_DIRS = (
 
 #############################################################
 #############################################################
+
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
