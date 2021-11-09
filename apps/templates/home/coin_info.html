@@ -13,10 +13,10 @@
         <div class="header-body">
           <div class="row align-items-center py-4">
             <div class="col-lg-6 col-7">
-              <h1 class="h1 text-white d-inline-block mb-0">{{data.coin.name}}</h1> 
-                  <span class="text-white text-muted">({{data.coin.symbol}})</span>           
+              <h1 class="h1 text-white d-inline-block mb-0">{{data.name | upper}}</h1> 
+                  <span class="text-warning">({{data.symbol | upper}})</span>           
                   <span class="icon icon-shape bg-gradient-blue text-white rounded-circle shadow">
-                      <img src = "{{data.coin.iconUrl}}" width="25" height="25">
+                      <img src = "{{data.image.large}}" width="25" height="25">
                   </span>
                   
               <nav aria-label="breadcrumb" class="d-none d-md-inline-block ml-md-4">
@@ -42,7 +42,7 @@
                   <div class="row">
                     <div class="col">
                       <h5 class="card-title text-uppercase text-muted mb-0">Circulating Suppy</h5>
-                      <span class="h2 font-weight-bold mb-0">{{data.coin.circulatingSupply | intword }}</span>
+                      <span class="h2 font-weight-bold mb-0">{{data.market_data.circulating_supply | intword }}</span>
                     </div>
                     <div class="col-auto">
                       <div class="icon icon-shape bg-gradient-red text-white rounded-circle shadow">
@@ -64,7 +64,7 @@
                   <div class="row">
                     <div class="col">
                       <h5 class="card-title text-uppercase text-muted mb-0">Market Cap</h5>
-                      <span class="h2 font-weight-bold mb-0">{{data.coin.marketCap | intword }}</span>
+                      <span class="h2 font-weight-bold mb-0">{{data.market_data.market_cap.usd | intword }} $</span>
                     </div>
                     <div class="col-auto">
                       <div class="icon icon-shape bg-gradient-orange text-white rounded-circle shadow">
@@ -86,7 +86,7 @@
                   <div class="row">
                     <div class="col">
                       <h5 class="card-title text-uppercase text-muted mb-0">Volume</h5>
-                      <span class="h2 font-weight-bold mb-0">{{data.coin.volume | intword}}</span>
+                      <span class="h2 font-weight-bold mb-0">{{data.market_data.total_volume.usd  | intword}} $</span>
                     </div>
                     <div class="col-auto">
                       <div class="icon icon-shape bg-gradient-green text-white rounded-circle shadow">
@@ -104,7 +104,7 @@
                   <div class="row">
                     <div class="col">
                       <h5 class="card-title text-uppercase text-muted mb-0">Current Price</h5>
-                      <span class="h2 font-weight-bold mb-0">{{data.coin.price | floatformat:"4"}} $</span>
+                      <span class="h2 font-weight-bold mb-0">{{data.market_data.current_price.usd | floatformat:"4"}} $</span>
                     </div>
                     <div class="col-auto">
                       <div class="icon icon-shape bg-gradient-info text-white rounded-circle shadow">
@@ -120,9 +120,35 @@
               </div>
             </div>     
 
-            <div class="text-justify text-white">      
+            <div class="text-justify">      
 
-           
+            <table class="table table-borderless">
+
+              <tr>
+                <th> <span class="text-green h2">Genesis Date: {{data.genesis_date}} $</span></th>
+                <th> <span class="text-green h2">All Time High: {{data.market_data.ath.usd}} $</span></th>
+                <th><span class="text-green h2">All Time Low:  {{data.market_data.atl.usd}} $</span></th>
+               
+               </tr>
+
+              <tr>
+                <th> <span class="text-green h2">Market Cap Rank: {{data.genesis_date}} $</span></th>
+                <th> <span class="text-green h2">Overall rank: {{data.market_data.ath.usd}} $</span></th>
+                <th><span class="text-green h2">All Time Low:  {{data.market_data.atl.usd}} $</span></th>
+               
+               </tr>
+
+              <tr>
+                <th><span class="text-yellow h2">24h Change: {{data.market_data.price_change_percentage_24h}} %</th>
+                <th><span class="text-yellow h2">7d Change: {{data.market_data.price_change_percentage_7d}} %</span></th>
+                <th><span class="text-yellow h2">30d Change: {{data.market_data.price_change_percentage_30d}} %</span></th>                       
+              </tr>
+            
+            
+            </table>
+              
+            
+             
             
             </div>
             
@@ -137,7 +163,7 @@
 
 <!-- Page content -->
 <div class="container-fluid mt--16 pb-6 text-justify">  
-  {{data.coin.description | safe}}   
+  {{data.description.en | safe}}   
 </div>
 
 {% endblock content %}

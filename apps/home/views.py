@@ -82,18 +82,21 @@ def get_coins(request, id):
 def market(request):
     import requests
 
+    url = "https://coingecko.p.rapidapi.com/coins/markets"
 
-    url = "https://coinranking1.p.rapidapi.com/coins"
+    querystring = {"vs_currency":"usd","page":"1","per_page":"100","order":"market_cap_desc"}
 
     headers = {
-        'x-rapidapi-host': "coinranking1.p.rapidapi.com",
-        'x-rapidapi-key': "880fd93c19msh4398e1149e010aep102750jsn999e924bb265"
-        }
+    'x-rapidapi-host': "coingecko.p.rapidapi.com",
+    'x-rapidapi-key': "880fd93c19msh4398e1149e010aep102750jsn999e924bb265"
+    }
 
-    response = requests.request("GET", url, headers=headers)
+    response = requests.request("GET", url, headers=headers, params=querystring)
 
-    data = response.json()['data']
-    print(data['stats'])
+    #print(response.text)
+
+    data = response.json()
+    #print(data)
     context = {'segment': 'market','data':data}
     html_template = loader.get_template('home/market.html')
     return HttpResponse(html_template.render(context, request))
@@ -104,20 +107,19 @@ def market(request):
 def coin(request, id):
     import requests
 
-    id = id
-    
-    url = "https://coinranking1.p.rapidapi.com/coin/{0}".format(id)
-    print(url)
+    url = "https://coingecko.p.rapidapi.com/coins/{0}".format(id)
+
+    querystring = {"localization":"true","tickers":"true","market_data":"true","community_data":"true","developer_data":"true","sparkline":"false"}
 
     headers = {
-        'x-rapidapi-host': "coinranking1.p.rapidapi.com",
-        'x-rapidapi-key': "880fd93c19msh4398e1149e010aep102750jsn999e924bb265"
-        }
+    'x-rapidapi-host': "coingecko.p.rapidapi.com",
+    'x-rapidapi-key': "880fd93c19msh4398e1149e010aep102750jsn999e924bb265"
+    }
 
-    response = requests.request("GET", url, headers=headers)
+    response = requests.request("GET", url, headers=headers, params=querystring)
 
-    data = response.json()['data']
-    
+    #print(response.text)
+    data = response.json()
     #print(data)   
   
     context = {'segment': 'market','data':data}

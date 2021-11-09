@@ -27,7 +27,7 @@ urlpatterns = [
     path('news', views.news, name='news'),
 
     # The Market page
-    path('market/<int:id>', views.coin, name='coin-info'),
+    path('market/<str:id>', views.coin, name='coin-info'),
 
     # Matches any html file
     re_path(r'^.*\.*', views.pages, name='pages'),
