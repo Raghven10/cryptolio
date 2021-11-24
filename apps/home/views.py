@@ -69,6 +69,25 @@ def portfolio(request):
 
 
 @login_required(login_url="/login/")
+def delete_asset(request, id):  
+    asset = Asset.objects.get(pk=id)
+    asset.delete()
+    msg = 'Deleted Successfully.'
+    return HttpResponseRedirect('../../portfolio')
+
+@login_required(login_url="/login/")
+def get_asset(request, id):  
+    asset = Asset.objects.get(pk=id) 
+    
+    return render(request, "home/asset.html", {'segment': 'portfolio','asset':asset})
+
+@login_required(login_url="/login/")
+def update_asset(request, id):  
+    asset = Asset.objects.get(pk=id)
+    form = OrderForm(instance=asset)      
+    return render(request, "home/asset.html", {'segment': 'portfolio','item':asset,'form':form})
+
+@login_required(login_url="/login/")
 def get_coins(request, id):   
     import ccxt   
     id = id

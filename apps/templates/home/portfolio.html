@@ -32,8 +32,8 @@
            </div>
           {% endif %}
 
-            <a class="btn btn-sm btn-neutral" href="#" role="button" data-toggle="dropdown" aria-haspopup="false" aria-expanded="false">
-                New
+            <a class="btn btn-sm btn-success" href="#" role="button" data-toggle="dropdown" aria-haspopup="false" aria-expanded="false">
+                + New
             </a>     
             
               
@@ -110,22 +110,24 @@
                       </div>
                       <div class="col-lg-6">
                         <div class="form-group">
-                         <label class="form-control-label" for="orderDate">Last Updated on</label>
-                         <input type="date" id="lastUpdatedOn" name="lastUpdatedOn"class="form-control" required placeholder="Last Updated On">
-                        </div>
-                      </div>
-                    </div>
-                     <div class="row">
-                     <div class="col-lg-6">
-                        <div class="form-group">
                           <label class="form-control-label" for="exitPrice">Exit Price</label>
                           <input type="text" id="exitPrice" name="exitPrice"class="form-control" placeholder="Exit Price" min="0">
                         </div>
                       </div>
+                     
+                    </div>
+                     <div class="row">
                       <div class="col-lg-6">
                         <div class="form-group">
-                          <label class="form-control-label" for="lastUpdatedBy">Updated By</label>
-                          <input type="text" id="lastUpdatedBy" name="lastUpdatedBy" class="form-control" required value="{{ request.user.username }}" placeholder="lastUpdatedBy" readonly min="0">
+                         <label class="form-control-label" for="orderDate" hidden>Last Updated on</label>
+                         <input type="date" id="lastUpdatedOn" name="lastUpdatedOn"class="form-control" required hidden placeholder="Last Updated On">
+                        </div>
+                      </div>
+                     
+                      <div class="col-lg-6">
+                        <div class="form-group">
+                          <label class="form-control-label" for="lastUpdatedBy" hidden>Updated By</label>
+                          <input type="text" id="lastUpdatedBy" name="lastUpdatedBy" class="form-control" hidden required value="{{ request.user.username }}" placeholder="lastUpdatedBy" readonly min="0">
                         </div>
                       </div>
                     </div>
@@ -150,7 +152,7 @@
                 </div>
               </div>
 
-              <a href="#" class="btn btn-sm btn-neutral">Filters</a>          
+              {% comment %} <a href="#" class="btn btn-sm btn-neutral">Filters</a>           {% endcomment %}
            
           </div>
         </div>
@@ -192,11 +194,13 @@
                         <img alt="Image placeholder" src="/static/assets/img/theme/bootstrap.jpg">
                       </a> {% endcomment %}
                       <div class="media-body">
+                      <a href="{% url 'get_asset' order.id%}">
                         <span class="name mb-0 text-green text-sm">{{order.token}} |</span>
                         <span class="name mb-0 text-yellow text-sm">{{order.tradeType}}</span>
                         {% if 'order.leverage>=1' %}
                           <span class="name mb-0 text-danger text-sm">{{order.leverage}}X</span>
                         {% endif %}
+                      </a>
                       </div>
                     </div>
                   </th>
@@ -240,8 +244,8 @@
                       </a>
                       <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
                         <a class="dropdown-item" href="#">Details</a>   
-                        <a class="dropdown-item" href="#">Update</a>                       
-                        <a class="dropdown-item" href="#">Delete</a>
+                        <a class="dropdown-item" href="{% url 'get_asset' order.id %}">Update</a>                       
+                        <a class="dropdown-item" href="{% url 'delete_asset' order.id %}">Delete</a>
                       </div>
                     </div>
                   </td>

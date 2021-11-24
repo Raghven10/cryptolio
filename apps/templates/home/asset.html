@@ -1,0 +1,225 @@
+{% extends 'layouts/base.html' %}
+
+{% block title %} Tables {% endblock title %}
+
+{% block content %}
+{% load mathfilters %}
+  <div class="header bg-primary pb-6">
+    <div class="container-fluid">
+      <div class="header-body">
+        <div class="row align-items-center py-4">
+          <div class="col-lg-6 col-7">
+            <h6 class="h2 text-white d-inline-block mb-0">My Portfolio</h6>
+            <nav aria-label="breadcrumb" class="d-none d-md-inline-block ml-md-4">
+              <ol class="breadcrumb breadcrumb-links breadcrumb-dark">
+                <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+                <li class="breadcrumb-item"><a href="{% url 'portfolio' %}">Portfolio</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Asset Detail</li>
+              </ol>
+            </nav>
+          </div>
+          
+         
+        
+          <div class="col-lg-6 col-5 text-right">
+
+          {% if msg %}
+           <div class="alert alert-warning alert-dismissible fade show" role="alert">
+              {{msg}}
+              <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+           </div>
+          {% endif %}
+
+           
+            
+              
+              <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right assetForm" id ="assetForm">
+                <div class="row shortcuts px-4">
+
+                </div>
+              </div>            
+           
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Page content -->
+  <div class="container-fluid mt--6">
+    <!-- Dark table -->
+    <div class="row">
+      <div class="col">
+        <div class="card bg-default shadow">
+          <div class="card-header bg-transparent border-0">
+            <h3 class="text-white mb-0">Asset Detail</h3>
+          </div>
+          <!--Form Object here -->
+            <div class="row mx-auto">
+              <form action="#" method="POST">
+                   {% csrf_token %}
+                 <div class="pl-lg-12">
+                    <div class="row">
+                      <div class="col-lg-6">
+                        <div class="form-group">
+                          <label class="form-control-label" for="exchange">Select Exchange</label>
+                          <select type="text" id="exchange" onchange="loadCoins()" name="exchange" class="form-control" required placeholder="">
+                          <option value="{{asset.exchange}}"> {{asset.exchange | upper}}</option>
+                          {% for e in exchanges %}              
+                          <option value="{{e}}"> {{e|upper}}</option> 
+                          {% endfor %}                       
+                          </select>                        
+                        </div>
+                      </div>
+                      <div class="col-lg-6">
+                        <div class="form-group">
+                          <label class="form-control-label" for="token">Select Token</label>
+                          <select type="text" id="token" name="token" class="form-control" placeholder="Select Token" required disabled>
+                          <option value="{{asset.token}}"> {{asset.token}}</option>                                                 
+                          </select>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-lg-6">
+                        <div class="form-group">
+                          <label class="form-control-label" for="tradeType">Trade Type</label>
+                          <select type="text" id="tradeType" name="tradeType" onchange="setLeverage()" class="form-control" required placeholder="Select Trade Type">
+                          <option value="{{asset.tradeType}}"> {{asset.tradeType}}</option> 
+                          <option value="SPOT"> SPOT</option> 
+                          <option value="OPTION"> OPTION</option> 
+                          <option value="FUTURE"> FUTURE</option>                            
+                          
+                          </select>                        
+                        </div>
+                      </div>
+                      <div class="col-lg-6">
+                        <div class="form-group">
+                          <label class="form-control-label" for="leverage">Leverage</label>
+                          <input type="number" id="leverage" name="leverage" class="form-control" value="{{asset.leverage}}" required placeholder="leverage" min="1">
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-lg-6">
+                        <div class="form-group">
+                          <label class="form-control-label" for="input-first-name">Qty</label>
+                          <input type="number" id="totalQuantity" name="totalQuantity" value="{{asset.totalQuantity}}"  class="form-control" required placeholder="Qty" min="0">
+                        </div>
+                      </div>
+                      <div class="col-lg-6">
+                        <div class="form-group">
+                          <label class="form-control-label" for="entryPrice">Entry Price</label>
+                          <input type="text" id="entryPrice" name="entryPrice"  value="{{asset.entryPrice}}" class="form-control" required placeholder="Entry Price" min="0">
+                        </div>
+                      </div>                      
+                    </div>                   
+                    <div class="row">
+                       <div class="col-lg-6">
+                        <div class="form-group">
+                         <label class="form-control-label" for="orderDate">Order Date</label>
+                         <input type="date" id="orderDate" name="orderDate" class="form-control" value="{{asset.orderDate}}" required placeholder="Order Date">
+                        </div>
+                      </div>
+                      <div class="col-lg-6">
+                        <div class="form-group">
+                         <label class="form-control-label" for="orderDate">Last Updated on</label>
+                         <input type="date" id="lastUpdatedOn" name="lastUpdatedOn" class="form-control" value="{{asset.lastUpdatedOn}}" required placeholder="Last Updated On">
+                        </div>
+                      </div>
+                    </div>
+                     <div class="row">
+                     <div class="col-lg-6">
+                        <div class="form-group">
+                          <label class="form-control-label" for="exitPrice">Exit Price</label>
+                          <input type="text" id="exitPrice" name="exitPrice" class="form-control" placeholder="Exit Price" min="0">
+                        </div>
+                      </div>
+                      <div class="col-lg-6">
+                        <div class="form-group">
+                          <label class="form-control-label" for="lastUpdatedBy">Updated By</label>
+                          <input type="text" id="lastUpdatedBy" name="lastUpdatedBy" class="form-control" required value="{{asset.lastUpdatedBy}}" placeholder="lastUpdatedBy" readonly min="0">
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                       <div class="col-lg-8">
+                        <div class="form-group">
+                         <button class="btn btn-success btn-block" type="submit" value="submit">Update</button>
+                        </div>
+                      </div>
+                      <div class="col-lg-4">
+                        <div class="form-group">
+                         <a href="{% url 'portfolio' %}" class="btn btn-danger btn-block">Back</a>
+                        </div>
+                      </div>
+                    </div>
+                  </div>               
+                  </form>
+
+                </div>
+
+                <!--Form Object ends -->
+      
+        </div>
+      </div>
+    </div>
+
+    {% include "includes/footer.html" %}
+
+  </div>
+
+{% endblock content %}
+
+<!-- Specific JS goes HERE --> 
+{% block javascripts %}
+  <script>   
+   
+    function loadCoins(){
+      console.log($("#exchange").val());
+      
+      var exchange = $("#exchange").val();
+      $.ajax({
+        url: `get_coins/${exchange}`,       
+        dataType: 'json',
+        success: function (data) {          
+          $("#token").prop('disabled', false); 
+          let html_data = '<option value="">---------</option>';
+          
+          console.log(data);
+          if(typeof(data) === "string"){data = JSON.parse(data)}
+          data.forEach(function (data) {
+              html_data += `<option value="${data}">${data}</option>`
+          });
+          $("#token").html(html_data); 
+          
+        }
+      });      
+    };
+
+    function setLeverage(){
+      var tradeType = $("#tradeType").val();
+      if (tradeType == 'SPOT') {
+        $("#leverage").val(1);
+        $("#leverage").prop('readonly', true); 
+      }
+      else {
+         
+        $("#leverage").prop('readonly', false); 
+      }
+    };
+
+
+
+    $(document).on('click', '.assetForm', function (e) {
+      e.stopPropagation();
+    });
+
+    $('.alert').alert()
+   
+  </script>
+
+
+{% endblock javascripts %}

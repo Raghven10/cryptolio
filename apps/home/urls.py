@@ -18,7 +18,18 @@ urlpatterns = [
      # The Portfolio page
     path('portfolio', views.portfolio, name='portfolio'),
 
+    # view aseet detail
+    path('get_asset/<str:id>', views.get_asset, name='get_asset'),
+
+     # update aseet detail
+    path('update_asset/<str:id>', views.update_asset, name='update_asset'),
+
+    # delete aseet from portfolio
+    path('delete_asset/<str:id>', views.delete_asset, name='delete_asset'),
+
     path('get_coins/<str:id>', views.get_coins, name='get_coins'),
+
+
 
      # The News page
     path('screener', views.screener, name='screener'),
