@@ -23,10 +23,17 @@ def index(request):
     return HttpResponse(html_template.render(context, request))
 
 
+@login_required(login_url="/login/")
+def heatmap(request):
+    context = {'segment': 'heatmap'}
+
+    html_template = loader.get_template('home/heatmap.html')
+    return HttpResponse(html_template.render(context, request))
+
 
 @login_required(login_url="/login/")
 def screener(request):
-    context = {'segment': 'market_data'}
+    context = {'segment': 'screener'}
 
     html_template = loader.get_template('home/market_data.html')
     return HttpResponse(html_template.render(context, request))

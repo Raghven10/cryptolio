@@ -15,6 +15,9 @@ urlpatterns = [
     # The Market page
     path('market', views.market, name='market'),
 
+     # The Heatmap page
+    path('heatmap', views.heatmap, name='heatmap'),
+
      # The Portfolio page
     path('portfolio', views.portfolio, name='portfolio'),
 
@@ -28,8 +31,6 @@ urlpatterns = [
     path('delete_asset/<str:id>', views.delete_asset, name='delete_asset'),
 
     path('get_coins/<str:id>', views.get_coins, name='get_coins'),
-
-
 
      # The News page
     path('screener', views.screener, name='screener'),
