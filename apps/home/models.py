@@ -13,10 +13,11 @@ class Asset(models.Model):
     tradeType = models.CharField(max_length=20)
     leverage = models.IntegerField()
     entryPrice = models.FloatField()      
-    totalQuantity = models.FloatField()
+    totalQuantity = models.FloatField(blank=True, null=True)
+    tradeSize = models.FloatField(blank=True, null=True)
     exitPrice = models.FloatField(blank=True, null=True)
-    exitDate = models.DateTimeField(auto_now_add = True)    
-    lastUpdatedOn = models.DateTimeField(auto_now_add = True)
+    exitDate = models.DateTimeField(blank=True, null=True,auto_now = True)    
+    lastUpdatedOn = models.DateTimeField(auto_now = True)
     lastUpdatedBy = models.CharField(max_length=20)
 
     

@@ -13,8 +13,6 @@ from apps.home.forms import OrderForm
  
 from .models import Asset
 
-
-
 @login_required(login_url="/login/")
 def index(request):
     context = {'segment': 'index'}
@@ -47,8 +45,7 @@ def screener(request):
 #     success_url = reverse_lazy('portfolio',{'exchanges':exchanges})
 
 @login_required(login_url="/login/")
-def portfolio(request):
-    
+def portfolio(request):    
     form = OrderForm(request.POST or None)  
     msg = None
     if request.method == "POST":  
@@ -71,7 +68,27 @@ def portfolio(request):
         import ccxt    
         exchanges = ccxt.exchanges      
           
-        orders = Asset.objects.all()         
+        orders = Asset.objects.filter(user = request.user.id)
+        
+        def getLastPrice(o): 
+            import ccxt        
+            id = o.exchange
+            exchange = eval ('ccxt.%s()' %id)
+            print(exchange)
+            markets = exchange.load_markets() 
+            ticker = exchange.fetch_ticker(o.token)
+            try:
+                lastPrice = ticker['info']['lastPrice']
+            except: 
+                lastPrice= 0.0
+            print(o.token)
+            print(lastPrice) 
+            return lastPrice
+        
+        result = map(getLastPrice,orders)
+        prices = list(result)
+        orders = zip(orders,prices)  
+            
     return render(request, "home/portfolio.html", {'segment': 'portfolio','exchanges':exchanges, 'form':form,"msg": msg, 'orders':orders})
 
 
@@ -86,13 +103,30 @@ def delete_asset(request, id):
 def get_asset(request, id):  
     asset = Asset.objects.get(pk=id) 
     
-    return render(request, "home/asset.html", {'segment': 'portfolio','asset':asset})
+    return render(request, "home/view_asset.html", {'segment': 'portfolio','asset':asset})
 
 @login_required(login_url="/login/")
-def update_asset(request, id):  
-    asset = Asset.objects.get(pk=id)
-    form = OrderForm(instance=asset)      
-    return render(request, "home/asset.html", {'segment': 'portfolio','item':asset,'form':form})
+def update_asset(request, id):          
+    if request.method == "POST":         
+        form = OrderForm(request.POST or None)           
+        print('Entered POST method...')
+        if form.is_valid():  
+            print('Form is valid...')
+            try:  
+                print('Try to update Form ..')
+                form.save()                        
+                return HttpResponseRedirect('portfolio')
+            except:  
+                msg = "Sorry, Form was not saved!"
+        else:
+            print('Form is not valid...exiting')
+            msg = 'Error validating the form'
+            return HttpResponseRedirect('portfolio')
+    else:
+        asset = Asset.objects.get(pk=id)
+        form = OrderForm(instance=asset) 
+
+    return render(request, "home/view_asset.html", {'segment': 'portfolio','asset':asset,'form':form})
 
 @login_required(login_url="/login/")
 def get_coins(request, id):   
@@ -126,8 +160,6 @@ def market(request):
     context = {'segment': 'market','data':data}
     html_template = loader.get_template('home/market.html')
     return HttpResponse(html_template.render(context, request))
-
-
 
 @login_required(login_url="/login/")
 def coin(request, id):
@@ -192,9 +224,27 @@ def pages(request):
 
     except template.TemplateDoesNotExist:
 
-        html_template = loader.get_template('home/page-404.html')
+        html_template = loader.get_template('errors/page-404.html')
         return HttpResponse(html_template.render(context, request))
 
     except:
-        html_template = loader.get_template('home/page-500.html')
+        html_template = loader.get_template('errors/page-500.html')
         return HttpResponse(html_template.render(context, request))
+
+
+# default Error pages 
+def error_404(request, exception):
+        data = {}
+        return render(request,'errors/page-404.html', data)
+
+def error_500(request):
+        data = {}
+        return render(request,'errors/page-500.html', data)
+
+def error_403(request, exception):
+        data = {}
+        return render(request,'errors/page-403.html', data)
+
+def error_400(request, exception):
+        data = {}
+        return render(request,'errors/page-400.html', data)

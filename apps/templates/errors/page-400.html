@@ -1,6 +1,6 @@
 {% extends 'layouts/base-fullscreen.html' %}
 
-{% block title %} Error 403 {% endblock title %}
+{% block title %} Error 400 {% endblock title %}
 
 <!-- Specific CSS goes HERE -->
 {% block stylesheets %}{% endblock stylesheets %}
@@ -15,11 +15,11 @@
             <div class="card-header bg-transparent pb-5">
 
               <div class="text-muted text-center mt-2 mb-3">
-                Oups! Error 403      
+                Oops! Error 400      
               </div>
 
               <div class="text-center mb-4">
-                Access denied - Please authenticate <a href="{% url 'login' %}">Login</a>
+                Server Error - Bad Request <a href="{% url 'home' %}">Home</a>
               </div>
 
             </div>
@@ -30,7 +30,7 @@
             </div>          
             <div class="col-6 text-right">
               <a target="_blank" 
-                 href="https://appseed.us/support" class="text-light"><small>Get Support</small></a>
+                 href="https://cryptolio.com/support" class="text-light"><small>Get Support</small></a>
             </div>
           </div>
         </div>

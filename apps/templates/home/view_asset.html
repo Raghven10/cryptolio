@@ -1,0 +1,159 @@
+{% extends 'layouts/base.html' %}
+
+{% block title %} Asset Details{% endblock title %}
+
+{% block content %}
+
+<div class="header pb-6 d-flex align-items-center" 
+     style=" background-size: cover; background-position: center top;">
+  <!-- Mask -->
+  <span class="mask bg-gradient-default opacity-8"></span>
+  <!-- Header container -->
+  <div class="container-fluid d-flex align-items-center">
+    <div class="row">
+      <div class="col-lg-7 col-md-10">
+        <h1 class="display-2 text-white"> 
+         
+        </h1>
+        <p class="text-white mt-0 mb-5"></p>
+        
+      </div>
+    </div>
+  </div> 
+</div>
+<!-- Page content -->
+<div class="container-fluid mt--6">
+  <div class="row">  
+    <div class="col-xl-8 order-xl-1">
+      <div class="card">
+        <div class="card-header">
+          <div class="row align-items-center">
+            <div class="col-8">
+              <h3 class="mb-0">{{asset.token}}</h3>
+            </div>
+            <div class="col-4 text-right">
+              <a href="{% url 'portfolio' %}" class="btn btn-sm btn-primary">Go Back</a>
+            </div>
+          </div>
+        </div>
+        <div class="card-body">          
+            <h6 class="heading-small text-muted mb-2">Order details</h6>
+            <!--Form Object here -->           
+              <form action="#" method="POST">
+                   {% csrf_token %}
+                 <div class="pl-lg-12">
+                    <div class="row">
+                      <div class="col-lg-6">
+                        <div class="form-group">
+                          <label class="form-control-label" for="exchange">Exchange</label>
+                          <input type="text" name="exchange" class="form-control" value="{{asset.exchange}}" readonly>                
+                        </div>
+                      </div>
+                      <div class="col-lg-6">
+                        <div class="form-group">
+                          <label class="form-control-label" for="token">Token Name</label>
+                         <input type="text" name="token" class="form-control" value="{{asset.token}}" readonly>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-lg-6">
+                        <div class="form-group">
+                          <label class="form-control-label" for="tradeType">Trade Type</label>
+                          <input type="text" id="tradeType" name="tradeType" class="form-control" value="{{asset.tradeType}}" readonly>
+                        </div>
+                      </div>
+                      <div class="col-lg-6">
+                        <div class="form-group">
+                          <label class="form-control-label" for="leverage">Leverage</label>
+                          <input type="number" id="leverage" name="leverage" class="form-control" value="{{asset.leverage}}" readonly>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      {% if asset.totalQuantity %}
+                      <div class="col-lg-6">
+                        <div class="form-group">
+                          <label class="form-control-label" for="input-first-name">Total Qty</label>
+                          <input type="text" id="totalQuantity" name="totalQuantity" value="{{asset.totalQuantity}}"  class="form-control" readonly>
+                        </div>
+                      </div>
+                      {% else %}
+                      <div class="col-lg-6">
+                        <div class="form-group">
+                          <label class="form-control-label" for="input-first-name">Trade Size</label>
+                          <input type="text" id="tradeSize" name="tradeSize" value="{{asset.tradeSize}}"  class="form-control" readonly>
+                        </div>
+                      </div>
+                      {% endif %}
+                      <div class="col-lg-6">
+                        <div class="form-group">
+                          <label class="form-control-label" for="entryPrice">Entry Price</label>
+                          <input type="text" id="entryPrice" name="entryPrice"  value="{{asset.entryPrice}}" class="form-control" readonly>
+                        </div>
+                      </div>                      
+                    </div>                   
+                    <div class="row">
+                       <div class="col-lg-6">
+                        <div class="form-group">
+                         <label class="form-control-label" for="orderDate">Order Date</label>
+                         <input type="text" id="orderDate" name="orderDate" class="form-control" value="{{asset.orderDate | date}}" readonly>
+                        </div>
+                      </div>
+                      <div class="col-lg-6">
+                        <div class="form-group">
+                         <label class="form-control-label" for="orderDate">Last Updated on</label>
+                         <input type="text" id="lastUpdatedOn" name="lastUpdatedOn" class="form-control" value="{{asset.lastUpdatedOn | date}}" readonly />
+                        </div>
+                      </div>
+                    </div>
+                     <div class="row">
+                     <div class="col-lg-6">
+                        <div class="form-group">
+                          <label class="form-control-label" for="exitPrice">Exit Price</label>
+                          {% if asset.exitPrice %}
+                          <input type="text" value="{{asset.exitPrice}}" class="form-control" readonly/>
+                          {% else %}
+                          <input type="number" name="exitPrice" class="form-control" step="0.00000001" min="0" />
+                          {% endif %}
+                        </div>
+                      </div>
+                      <div class="col-lg-6">
+                        <div class="form-group">
+                          <label class="form-control-label" for="lastUpdatedBy">Updated By</label>
+                          <input type="text" id="lastUpdatedBy" name="lastUpdatedBy" class="form-control" required value="{{asset.lastUpdatedBy}}" readonly />
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                       <div class="col-lg-8">
+                        <div class="form-group">
+                        {% if asset.exitPrice %}
+                         <button class="btn btn-success btn-block" type="submit" value="submit" disabled>Update</button>
+                        {% else %}
+                         <button class="btn btn-success btn-block" type="submit" value="submit">Update</button>
+                        {% endif %}
+                        </div>
+                      </div>
+                      <div class="col-lg-4">
+                        <div class="form-group">
+                         <a href="{% url 'portfolio' %}" class="btn btn-danger btn-block">Back</a>
+                        </div>
+                      </div>
+                    </div>
+                  </div>               
+                </form>                
+          <!--Form Object ends -->    
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {% include "includes/footer.html" %}
+
+</div>
+
+{% endblock content %}
+
+<!-- Specific JS goes HERE --> 
+{% block javascripts %}{% endblock javascripts %}
